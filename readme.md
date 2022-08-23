@@ -106,6 +106,12 @@ option OR a browser may offer it within the settings and scope of the applicatio
 The choice was made to respect both, flagging `prefers-reduced-data` to true 
 if the system or the browser have the setting enabled.
 
+### Tricky design choice #2
+
+In the spirit of network savings, this Media Query has a guard against accidental data incurrence. During the lifespan of the page, if the Media Query changes, whether user invoked or system automatically invoked, the following rule applies: if the value has switched from `reduce` to `no-preference` (low bandwidth browsing to high bandwidth browsing), the page will not re-evaluate and update, as to not automatically incur a bunch of network data. Furthermore, if the value has switched from `no-preference` to `reduce` (high bandwidth to low bandwidth), it should re-evaluate and update the page accordingly. 
+
+Essentially this media query will reactively downgrade the page but require a user invoked (explicit) page reload to upgrade.
+
 ## Stakeholder Feedback / Opposition
 
 - Adam Argyle (implementor) : Positive

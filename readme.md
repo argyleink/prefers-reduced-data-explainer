@@ -80,11 +80,15 @@ A user in a data-saver mode wants to browse a webpage about books.
 The site uses the `prefers-reduced-data` media to remove book images from the layout, 
 and the user is able to have low-bandwidth access to the full collection.
 
-```js
-.book img {
-  display: none;
+```css
+@media (prefers-reduced-data: reduce) {
+  .book img {
+    display: none;
+  }
 }
 ```
+
+> Note: this does require `loading="lazy"` on the images so they aren't fetched as soon as possible, giving CSS enough time to hide them from the DOM tree.
 
 ### Scenario 2
 

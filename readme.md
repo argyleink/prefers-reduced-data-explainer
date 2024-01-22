@@ -103,22 +103,29 @@ https://www.smashingmagazine.com/2021/12/core-web-vitals-case-study-smashing-mag
 
 ## Detailed design discussion
 
-### Tricky design choice #1
+### Design choice #1
 
 A user's operating system may offer the data-saver (perhaps alternate verbiage but same intent) 
 option OR a browser may offer it within the settings and scope of the application. 
 The choice was made to respect both, flagging `prefers-reduced-data` to true 
 if the system or the browser have the setting enabled.
 
-### Tricky design choice #2
+### Design consideration #1
 
-In the spirit of network savings, this Media Query has a guard against accidental data incurrence. 
-During the lifespan of the page, if the Media Query changes, whether user invoked or system automatically invoked, 
-the following rule applies: 
-1. if the value has switched from `reduce` to `no-preference` (low bandwidth browsing to high bandwidth browsing), the page will not re-evaluate and update, as to not automatically incur a bunch of network data. 
-2. if the value has switched from `no-preference` to `reduce` (high bandwidth to low bandwidth), it should re-evaluate and update the page accordingly. 
-
-Essentially this media query will reactively reduce the page but require a user invoked (explicit) page reload to download the higher resolution or heavier assets.
+User agents should use their own user centered discretion when 
+	handling a toggle of this value, whether it's toggled post page load 
+	or during page load. A primary goal could be to not download unnecessary 
+	data. Consider, if a page is already loaded with high quality assets and 
+	the user changes their preference to reduced, the page should perhaps 
+	not update the document right away, instead wait for an explicit page 
+	reload invocation from the user. Consider also, if a page is taking a 
+	long time to download and a user changes their preference to reduced, 
+	this could be a nice point to save the user's bandwidth and immediately 
+	switch to downloading smaller assets. 
+ 
+ User agents should be free to 
+	implement logic as they see appropriate for situations like these, and 
+	also be aware the situations exist.
 
 ## Stakeholder Feedback / Opposition
 
